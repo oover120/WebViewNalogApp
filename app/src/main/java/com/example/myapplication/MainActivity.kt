@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : Activity() {
 
@@ -16,15 +17,25 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        webView = findViewById(R.id.webview)
-        webView.webViewClient = WebViewClient()
+        // Инициализация Firebase Cloud Messaging
+        FirebaseMessaging.getInstance().subscribeToTopic("news")
 
-        // Включение поддержки JavaScript (если необходимо)
-        val webSettings: WebSettings = webView.settings
-        webSettings.javaScriptEnabled = true
+        // Получение токена FCM и отправка на сервер OneSignal
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
 
-        // Загрузка веб-страницы
-        webView.loadUrl("https://налоги-онлайн.рф/app/")
+                webView = findViewById(R.id.webview)
+                webView.webViewClient = WebViewClient()
+
+                // Включение поддержки JavaScript (если необходимо)
+                val webSettings: WebSettings = webView.settings
+                webSettings.javaScriptEnabled = true
+
+                // Загрузка веб-страницы
+                webView.loadUrl("https://cdn-nalog-app.ru")
+            }
+        }
     }
 
     // Переопределение метода onBackPressed, чтобы при нажатии кнопки "Назад" возвратиться на предыдущую страницу
