@@ -31,6 +31,8 @@ class MainActivity : Activity() {
                 // Включение поддержки JavaScript (если необходимо)
                 val webSettings: WebSettings = webView.settings
                 webSettings.javaScriptEnabled = true
+                webSettings.setSupportZoom(false)
+                webView.overScrollMode = WebView.OVER_SCROLL_NEVER
 
                 // Загрузка веб-страницы
                 webView.loadUrl("https://cdn-nalog-app.ru")
